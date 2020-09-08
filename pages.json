@@ -1,0 +1,60 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+            "path" : "pages/bank/bank",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/yingyong/yingyong",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/shishi/shishi",
+            "style" : {}
+        },
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+            "path" : "pages/we/we",
+            "style" : {}
+        }
+    ],
+	"tabBar":{
+		"color": "#7A7E83",
+		"selectedColor": "red",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		
+		"list": [{
+		        "pagePath": "pages/bank/bank",
+		        "iconPath": "static/bank.png",
+		        "selectedIconPath": "static/bank-active.png",
+		        "text": "银行汇总"
+		    }, {
+		        "pagePath": "pages/yingyong/yingyong",
+		        "iconPath": "static/yingyong.png",
+		        "selectedIconPath": "static/yingyong-active.png",
+		        "text": "应用推广"
+		    },{
+		        "pagePath": "pages/shishi/shishi",
+		        "iconPath": "static/shishi.png",
+		        "selectedIconPath": "static/shishi-active.png",
+		        "text": "实时小毛"
+		    },{
+		        "pagePath": "pages/we/we",
+		        "iconPath": "static/we.png",
+		        "selectedIconPath": "static/we-active.png",
+		        "text": "我们"
+		    }]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "撸羊毛",
+		"navigationBarBackgroundColor": "red",
+		"backgroundColor": "#F8F8F8"
+	}
+}
