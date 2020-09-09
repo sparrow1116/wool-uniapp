@@ -122,7 +122,8 @@
 
 <script>
 	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-	import{dateFormat,get3MonthBefor} from "@/util/tool.js"
+	import{dateFormat,get3MonthBefor} from "@/util/tool.js";
+	import{http} from "@/util/http.js"
 	export default {
 		components: {
 		        uniCalendar
@@ -136,6 +137,9 @@
 			let threeDate = new Date(threeMonthAgo);
 			
 			this.startDate = dateFormat("YYYY-mm-dd", threeDate);
+			
+			this.getDate(this.today);
+			
 		},
 		data() {
 			return {
@@ -145,7 +149,11 @@
 			}
 		},
 		methods: {
-			change(){
+			async getDate(day){
+				let dd = await http({url:"/api/getDataList",
+									data:{date:day}});
+									
+				   console.log("getDate::"+ JSON.stringify(dd))
 			},
 			popupDatePan(){
 				this.$refs.calendar.open();
@@ -222,7 +230,8 @@
 					}
 				}
 				.sDetail{
-					font-size: 16px;
+					font-size: 14px;
+					line-height:14px;
 					padding-top: 6px;
 				}
 				.router{
