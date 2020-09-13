@@ -13,7 +13,15 @@ export function http(opt){
 			data:data,
 			success:(dd)=>{
 				console.log(dd);
-				res(dd);
+				if(dd.statusCode==200){
+					if(dd.data.msg.code == 0){
+						res(dd.data.msg.data)
+					}else{
+						console.log("平台数据错误")
+					} 
+				}else{
+					console.log('链接平台错误')
+				}
 			}
 		})
 	})

@@ -23,96 +23,24 @@
 			<view>抽奖</view>
 		</view>
 		<view class="list">
-			<view class="item">
+			<view class="item" v-for="item in listDate">
 				<view class="left">
-					<view class="commercial">携程</view>
+					<view class="commercial">{{item.commercial}}</view>
 					<view>+</view>
-					<view class="bank">农行</view>
+					<view class="bank">{{item.bank}}</view>
 				</view>
 				
 				<view class="content">
 					<view class="title">
-						<view class="text">农行VISA双标卡（机票券）</view>
-						<view class="icon">详情</view>
+						<view class="text">{{item.title}}</view>
+						<view class="icon" v-if="item.detailUrl">详情</view>
 					</view>
 					<view class="sDetail">
-						<view>
-							每日，抢：满201减200元、满101减100元、满51减50元机票券，活动期每卡限1次，名额有限
+						<view v-for="descrip in item.description">
+							{{descrip}}
 						</view>
 					</view>
-					<view class="router" >活动入口：活动细则阅读原文/携程旅行APP-首页-机票-券（右上角)</view>
-				</view>
-			</view>
-			
-			<view class="item">
-				<view class="left">
-					<view class="commercial">携程</view>
-					<view>+</view>
-					<view class="bank">农行</view>
-				</view>
-				
-				<view class="content">
-					<view  class="title">农行VISA双标卡（机票券）</view>
-					<view class="sDetail">
-						<view>
-							每日，抢：满201减200元、满101减100元、满51减50元机票券，活动期每卡限1次，名额有限
-						</view>
-					</view>
-					<view class="router" >活动入口：活动细则阅读原文/携程旅行APP-首页-机票-券（右上角)</view>
-				</view>
-			</view>
-			
-			<view class="item">
-				<view class="left">
-					<view class="commercial">携程</view>
-					<view>+</view>
-					<view class="bank">农行</view>
-				</view>
-				
-				<view class="content">
-					<view  class="title">农行VISA双标卡（机票券）</view>
-					<view class="sDetail">
-						<view>
-							每日，抢：满201减200元、满101减100元、满51减50元机票券，活动期每卡限1次，名额有限
-						</view>
-					</view>
-					<view class="router" >活动入口：活动细则阅读原文/携程旅行APP-首页-机票-券（右上角)</view>
-				</view>
-			</view>
-			
-			<view class="item">
-				<view class="left">
-					<view class="commercial">携程</view>
-					<view>+</view>
-					<view class="bank">农行</view>
-				</view>
-				
-				<view class="content">
-					<view  class="title">农行VISA双标卡（机票券）</view>
-					<view class="sDetail">
-						<view>
-							每日，抢：满201减200元、满101减100元、满51减50元机票券，活动期每卡限1次，名额有限
-						</view>
-					</view>
-					<view class="router" >活动入口：活动细则阅读原文/携程旅行APP-首页-机票-券（右上角)</view>
-				</view>
-			</view>
-			
-			<view class="item">
-				<view class="left">
-					<view class="commercial">携程</view>
-					<view>+</view>
-					<view class="bank">农行</view>
-				</view>
-				
-				<view class="content">
-					<view  class="title">农行VISA双标卡（机票券）</view>
-					<view class="sDetail">
-						<view>
-							每日，抢：满201减200元、满101减100元、满51减50元机票券，活动期每卡限1次，名额有限
-						</view>
-					</view>
-					<view class="router" >活动入口：活动细则阅读原文/携程旅行APP-首页-机票-券（右上角)</view>
+					<view class="router" >{{item.router}}</view>
 				</view>
 			</view>
 		</view>
@@ -136,8 +64,8 @@
 			let threeMonthAgo = get3MonthBefor();
 			let threeDate = new Date(threeMonthAgo);
 			
-			this.startDate = dateFormat("YYYY-mm-dd", threeDate);
-			
+			// this.startDate = dateFormat("YYYY-mm-dd", threeDate);
+			this.today = '2020-09-09'
 			this.getDate(this.today);
 			
 		},
@@ -145,15 +73,23 @@
 			return {
 				today:"",
 				startDate:"",
-				endDate:""
+				endDate:"",
+				listDate:[]
 			}
 		},
 		methods: {
 			async getDate(day){
 				let dd = await http({url:"/api/getDataList",
 									data:{date:day}});
-									
-				   console.log("getDate::"+ JSON.stringify(dd))
+						
+					this.listDate  = dd.map((item)=>{
+						item.description = JSON.parse(item.description)
+						item.groupArr = JSON.parse(item.groupArr)
+						return item
+					})
+					console.log(this.listDate.length)
+					// this.listDate = dd;
+				 //   console.log("getDate::"+ JSON.stringify(dd))
 			},
 			popupDatePan(){
 				this.$refs.calendar.open();
@@ -207,12 +143,14 @@
 				justify-content: center;
 				text-align: center;
 				font-weight: bold;
-				width:140rpx;
+				background:$wool-bg-color;
+				color:$wool-text-color;
+				width:170rpx;
 			}
 			
 			.content{
 				width:590rpx;
-				padding:10rpx 5rpx;
+				padding:10rpx 20rpx;
 				.title{
 					display:flex;
 					justify-content:space-between;
@@ -231,7 +169,7 @@
 				}
 				.sDetail{
 					font-size: 14px;
-					line-height:14px;
+					line-height:20px;
 					padding-top: 6px;
 				}
 				.router{
