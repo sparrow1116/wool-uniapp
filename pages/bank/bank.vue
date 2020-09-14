@@ -23,7 +23,7 @@
 			<view>抽奖</view>
 		</view>
 		<view class="list">
-			<view class="item" v-for="item in listDate">
+			<view class="item" v-for="item in listDate" @click="choseOne(item)">
 				<view class="left">
 					<view class="commercial">{{item.commercial}}</view>
 					<view>+</view>
@@ -90,6 +90,19 @@
 					console.log(this.listDate.length)
 					// this.listDate = dd;
 				 //   console.log("getDate::"+ JSON.stringify(dd))
+			},
+			choseOne(item){
+				console.log('click  id   ' + item.myId);
+				uni.navigateTo({
+					url:'/pages/bank/detail?myId=' + item.myId,
+					success:()=>{
+						console.log('gotoDetail')
+					},
+					error:()=>{
+						console.log('finish')
+					}
+				})
+				console.log('finish')
 			},
 			popupDatePan(){
 				this.$refs.calendar.open();

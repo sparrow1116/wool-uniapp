@@ -22,6 +22,12 @@
             "path" : "pages/we/we",
             "style" : {}
         }
+        ,{
+            "path" : "pages/bank/detail",
+            "style" : {
+				"navigationBarTitleText": "羊毛详情"
+			}
+        }
     ],
 	"tabBar":{
 		"color": "#7A7E83",
