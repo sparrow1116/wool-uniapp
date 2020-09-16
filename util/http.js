@@ -1,5 +1,6 @@
+import config from './config'
 
-const BaseUrl = "http://localhost:3000"
+const BaseUrl = config.baseDemain
 
 export function http(opt){
 	

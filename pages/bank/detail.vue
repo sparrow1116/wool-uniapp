@@ -4,26 +4,43 @@
 		<view class='tt_descipt' v-if="result.despArr && result.despArr.length>0">
 			<view class='descipt_item' v-for="desp in result.despArr">{{desp}}</view>
 		</view>
+		<view class='img_block' v-if='result.picArr && result.picArr.length>0'>
+			<view v-for='pic in result.picArr'>
+				<image mode="widthFix" :src="pic"
+				                        @error="imageError"></image>
+			</view>
+		</view>
+		
 	</view>
 </template>
 
 <script>
-	import{http} from "@/util/http.js"
+	import{http} from "@/util/http.js";
+	import config from '@/util/config.js'
 	export default {
 		data() {
 			return {
-				result:{}
+				result:{},
+				src:'http://172.171.2.211:7777/1f9a3531-a591-41e5-8f7b-c9e3e37605bf.png'
 			}
+			
 		},
 		onLoad(dd){
 			console.log(dd)
 			this.getData(dd);
 		},
 		methods: {
+			imageError(){
+				console.log('fuck')
+			},
 			async getData(dd){
 				let item = await http({url:"/api/getDetail",data:dd})
 					item.despArr = JSON.parse(item.despArr);
 					item.picArr = JSON.parse(item.picArr)
+					for(let i =0; i<item.picArr.length; i++){
+						item.picArr[i] = config.picDomain + '/' + item.picArr[i]
+					}
+					console.log(item.picArr)
 					this.result = item;
 			}
 		}
@@ -59,5 +76,8 @@
 			margin-top: -54px;
 		}
 		
+	}
+	.img_block{
+		margin:10rpx 50rpx
 	}
 </style>
