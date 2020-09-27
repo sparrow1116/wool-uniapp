@@ -52,6 +52,7 @@
 	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
 	import{dateFormat,get3MonthBefor} from "@/util/tool.js";
 	import{http} from "@/util/http.js"
+	import api from '@/util/api.js'
 	export default {
 		components: {
 		        uniCalendar
@@ -79,7 +80,7 @@
 		},
 		methods: {
 			async getDate(day){
-				let dd = await http({url:"/api/getDataList",
+				let dd = await http({url:api.getBankList,
 									data:{date:day}});
 						
 					this.listDate  = dd.map((item)=>{

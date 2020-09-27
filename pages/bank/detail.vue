@@ -10,15 +10,14 @@
 				                        @error="imageError"></image>
 			</view>
 		</view>
-		<view class='originalUrl' v-if='this.result.orignalUrl'>
-			<a :href='this.result.orignalUrl'>阅读原文</a>
-		</view>
+		
 	</view>
 </template>
 
 <script>
 	import{http} from "@/util/http.js";
 	import config from '@/util/config.js'
+	import api from '@/util/api.js'
 	export default {
 		data() {
 			return {
@@ -36,7 +35,7 @@
 				console.log('fuck')
 			},
 			async getData(dd){
-				let item = await http({url:"/api/getDetail",data:dd})
+				let item = await http({url:api.getBankDetail,data:dd})
 					item.despArr = JSON.parse(item.despArr);
 					item.picArr = JSON.parse(item.picArr)
 					for(let i =0; i<item.picArr.length; i++){
@@ -80,9 +79,6 @@
 		
 	}
 	.img_block{
-		margin:50rpx 50rpx 30rpx 50rpx
-	}
-	.originalUrl{
-		padding:0rpx 50rpx
+		margin:10rpx 50rpx
 	}
 </style>

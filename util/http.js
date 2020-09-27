@@ -13,7 +13,7 @@ export function http(opt){
 			method,
 			data:data,
 			success:(dd)=>{
-				console.log(dd);
+				// console.log(dd);
 				if(dd.statusCode==200){
 					if(dd.data.msg.code == 0){
 						res(dd.data.msg.data)
