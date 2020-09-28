@@ -1,34 +1,37 @@
 <template>
-	<view>
-		<view v-for='(data,index) in dataList' :key='data.myId' class="item" @click="choseItem(index)">
-		        
-		  <view class="title">
-		      <h2>{{data.title}}</h2>
-		      <span>置顶</span>
-		  </view>
-		  <view class='body'> 
-		    <view class='left'>
-		      <img :src=data.headImg />
-		    </view>
-		    <view class="right">
-		        <view class='content'>
-		            {{data.desciption}}
-		        </view>
-		    </view>
-		  </view> 
-		   <view class='foot'>
-		      <span class='time'>{{data.time}}</span>
-			  <span>
-				  <span>浏览：</span>
-				  <span>{{data.browseCount}}</span>
-			  </span>
-			  <span>
-				  <span class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</span>
-			  </span>
-		    </view> 
-		</view>
-		<view class='dixian' v-if='count === dataList.length'>您已浏览所有羊毛</view>
-	</view>
+	
+		<unilist>
+			<view v-for='(data,index) in dataList' :key='data.myId' class="item" @click="choseItem(index)">
+			        
+			  <view class="title">
+			      <h2>{{data.title}}</h2>
+			      <span>置顶</span>
+			  </view>
+			  <view class='body'> 
+			    <view class='left'>
+			      <img :src=data.headImg />
+			    </view>
+			    <view class="right">
+			        <view class='content'>
+			            {{data.desciption}}
+			        </view>
+			    </view>
+			  </view> 
+			   <view class='foot'>
+			      <span class='time'>{{data.time}}</span>
+				  <span>
+					  <span>浏览：</span>
+					  <span>{{data.browseCount}}</span>
+				  </span>
+				  <span>
+					  <span class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</span>
+				  </span>
+			    </view> 
+			</view>
+			<view class='dixian' v-if='count === dataList.length'>您已浏览所有羊毛</view>
+		</unilist>
+	
+	
 </template>
 
 <script>
@@ -36,7 +39,12 @@
 	import config from '@/util/config.js'
 	import api from '@/util/api.js'
 	import{deepClone} from "@/util/tool.js";
+	
+	import unilist from '@/components/uni-list/uni-list.vue'
 	export default {
+		components: {
+		        unilist
+		},
 		data() {
 			return {
 				dataList:[],
@@ -46,6 +54,10 @@
 		onLoad(){
 			this.currentIndex = 0;
 			this.getData(this.currentIndex)
+			 // window.addEventListener('scroll', this.handleScroll, true);
+		},
+		onUnload(){
+			// window.removeEventListener('scroll', this.handleScroll);
 		},
 		async onPullDownRefresh() {
 			this.dataList = [];
@@ -63,6 +75,25 @@
 			await this.getData(this.currentIndex)
 		},
 		methods: {
+			// handleScroll(){
+			// 	// let clientHeight = document.documentElement.clientHeight
+			// 	console.log('>>>>>')
+			// 	// console.log(clientHeight)
+			// 	let dd = this.$refs.container.$el.scrollTop
+			// 	let bb = this.$refs.container.$el.scrollHeight
+				
+			// 	console.log(document.getElementById('xx').scrollTop)
+			// 	console.log('dd')
+			// 	console.log(dd)
+			// 	console.log(bb)
+			// },
+			// scrollToTop(e){
+			// 	console.log('>>>>>>>>>>>e')
+			// 	console.log(e)
+			// },
+			// scroll(e){
+			// 	console.log(e)
+			// },
 			choseItem(index){
 				console.log(index)
 				
@@ -103,7 +134,13 @@
 		font-size: $wool-tag-size;
 		padding: 20rpx 0;
 	}
+	.scroll-Y{
+		height:1500rpx;
+	}
 	.item{
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 		padding: 30rpx 20rpx;
 		border-bottom: 1px dashed $wool-bg-color;
 		.title{

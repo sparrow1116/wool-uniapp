@@ -9,6 +9,7 @@
 				<p style='text-align: left' v-if='block.type == "text"'>{{block.data}}
 				</p>
 				<img v-if='block.type =="img"' :title='detailData.title'
+					@click=previewPic(index)
 					:src='block.data'/>
 			  </view>
 			</view>
@@ -34,6 +35,33 @@
 				let item = await http({url:api.getWebDetail,data:dd})
 				item.contentArr = JSON.parse(item.contentArr)
 				this.detailData = item;
+			},
+			previewPic(index){
+				let imgArr = []
+				let currentIndex = 0
+				for(let i = 0; i<this.detailData.contentArr.length; i++){
+					if(this.detailData.contentArr[i].type === 'img'){
+						imgArr.push(this.detailData.contentArr[i].data)
+					}
+					if(index == i){
+						currentIndex = imgArr.length -1
+					}
+				}
+				
+				uni.previewImage({
+					urls:imgArr,
+					indicator:'default',
+					loop: true,
+					current:currentIndex,
+					success:(a)=>{
+						console.log('success')
+						console.log(a)
+					},
+					fail: (a)=> {
+						console.log('fail')
+						console.log(a)
+					}
+				})
 			}
 		}
 	}
