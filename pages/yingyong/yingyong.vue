@@ -1,36 +1,51 @@
 <template>
-	
-		<unilist>
-			<view v-for='(data,index) in dataList' :key='data.myId' class="item" @click="choseItem(index)">
-			        
-			  <view class="title">
-			      <h2>{{data.title}}</h2>
-			      <span>置顶</span>
-			  </view>
-			  <view class='body'> 
-			    <view class='left'>
-			      <img :src=data.headImg />
-			    </view>
-			    <view class="right">
-			        <view class='content'>
-			            {{data.desciption}}
-			        </view>
-			    </view>
-			  </view> 
-			   <view class='foot'>
-			      <span class='time'>{{data.time}}</span>
-				  <span>
-					  <span>浏览：</span>
-					  <span>{{data.browseCount}}</span>
-				  </span>
-				  <span>
-					  <span class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</span>
-				  </span>
-			    </view> 
-			</view>
-			<view class='dixian' v-if='count === dataList.length'>您已浏览所有羊毛</view>
-		</unilist>
-	
+	<view>
+		<uni_list>
+			<uni-list-item 
+			clickable
+			v-for='(data,index) in dataList' :key='data.myId' class="item" @click="choseItem(index)"
+			direction='column' title="活动简介" note="列表描述信息">
+			        <template slot="header">
+			            <view class="title">
+			                <h2>{{data.title}}</h2>
+			                <span>置顶</span>
+			            </view>
+			        </template>
+					
+					<template slot="body">
+					    <view class='body'>
+					      <view class='left'>
+					        <img :src=data.headImg />
+					      </view>
+					      <view class="right">
+					          <view class='content'>
+					              {{data.desciption}}
+					          </view>
+					      </view>
+					    </view> 
+					</template>
+					
+					<template slot="footer">
+					    <view class='foot'>
+					       <span class='time'>{{data.time}}</span>
+					    				  <span>
+					    					  <span>浏览：</span>
+					    					  <span>{{data.browseCount}}</span>
+					    				  </span>
+					    				  <span>
+					    					  <span class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</span>
+					    				  </span>
+					     </view> 
+					</template>
+			    </uni-list-item>
+		</uni_list>
+		<view class='dixian' v-if='count === dataList.length'>您已浏览所有羊毛</view>
+		<uni-fab ref="fab" :pattern="pattern" 
+			:content="content" 
+			:horizontal="horizontal" 
+			:vertical="vertical" 
+			:direction="direction" @trigger="trigger" @fabClick="fabClick" />
+	</view>
 	
 </template>
 
@@ -40,13 +55,56 @@
 	import api from '@/util/api.js'
 	import{deepClone} from "@/util/tool.js";
 	
-	import unilist from '@/components/uni-list/uni-list.vue'
+	import uniFab from '@/components/uni-fab/uni-fab.vue'
+	import uni_list from '@/components/uni-list/uni-list.vue'
+	import uni_list_item from '@/components/uni-list-item/uni-list-item.vue'
+	
 	export default {
 		components: {
-		        unilist
+			uni_list,
+			uniFab,
+			uni_list_item
 		},
 		data() {
 			return {
+				horizontal: 'right',
+				vertical: 'bottom',
+				direction: 'vertical',
+				pattern: {
+					color: '#7A7E83',
+					backgroundColor: '#fff',
+					selectedColor: '#007AFF',
+					buttonColor: '#007AFF'
+				},
+				content: [{
+						text: '集结组件',
+						active: false
+					},
+					{
+						text: '注册账号',
+						active: false
+					},
+					{
+						text: '模版毛线',
+						active: false
+					},
+					{
+						text: '模版毛线',
+						active: false
+					},
+					{
+						text: '模版毛线',
+						active: false
+					},
+					{
+						text: '模版毛线',
+						active: false
+					},
+					{
+						text: '模版毛线',
+						active: false
+					}
+				],
 				dataList:[],
 				count:0
 			}
@@ -75,6 +133,12 @@
 			await this.getData(this.currentIndex)
 		},
 		methods: {
+			trigger(e){
+				console.log('trigger:: e  ' + e)
+			},
+			fabClick(e){
+				console.log('fabClick  ' + e)
+			},
 			// handleScroll(){
 			// 	// let clientHeight = document.documentElement.clientHeight
 			// 	console.log('>>>>>')
@@ -141,7 +205,6 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		padding: 30rpx 20rpx;
 		border-bottom: 1px dashed $wool-bg-color;
 		.title{
 			display: flex;
