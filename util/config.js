@@ -1,5 +1,5 @@
 
  export default {
-	baseDemain:'http://localhost:3000',
-	picDomain:'http://localhost:7777'
+	baseDemain:'http://192.168.10.7:3000',
+	picDomain:'http://192.168.10.7:7777'
 }

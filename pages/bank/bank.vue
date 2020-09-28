@@ -50,7 +50,7 @@
 
 <script>
 	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-	import{dateFormat,get3MonthBefor} from "@/util/tool.js";
+	import{get3MonthBefor} from "@/util/tool.js";
 	import{http} from "@/util/http.js"
 	import api from '@/util/api.js'
 	export default {
@@ -59,13 +59,12 @@
 		},
 		onLoad(){
 			let date = new Date();
-			this.today = dateFormat("YYYY-mm-dd",date);
+			this.today = date.Format("yyyy-MM-dd",date);
 			this.endDate = this.today;
 			
 			let threeMonthAgo = get3MonthBefor();
 			let threeDate = new Date(threeMonthAgo);
 			
-			// this.startDate = dateFormat("YYYY-mm-dd", threeDate);
 			this.today = '2020-09-09'
 			this.getDate(this.today);
 			

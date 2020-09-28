@@ -6,7 +6,10 @@
         }
         ,{
             "path" : "pages/yingyong/yingyong",
-            "style" : {}
+            "style" : {
+				"enablePullDownRefresh": true,
+				"onReachBottonDistance": 80
+			}
         }
         ,{
             "path" : "pages/shishi/shishi",
@@ -26,6 +29,12 @@
             "path" : "pages/bank/detail",
             "style" : {
 				"navigationBarTitleText": "羊毛详情"
+			}
+        }
+        ,{
+            "path" : "pages/yingyong/detail",
+            "style" : {
+				"navigationBarTitleText": "活动介绍"
 			}
         }
     ],

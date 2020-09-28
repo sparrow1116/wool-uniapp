@@ -18,11 +18,16 @@
 		  </view> 
 		   <view class='foot'>
 		      <span class='time'>{{data.time}}</span>
-		      <span>浏览：</span>
-		      <span>{{data.browseCount}}</span>
-		      <span class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</span>
+			  <span>
+				  <span>浏览：</span>
+				  <span>{{data.browseCount}}</span>
+			  </span>
+			  <span>
+				  <span class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</span>
+			  </span>
 		    </view> 
 		</view>
+		<view class='dixian' v-if='count === dataList.length'>您已浏览所有羊毛</view>
 	</view>
 </template>
 
@@ -34,28 +39,70 @@
 	export default {
 		data() {
 			return {
-				dataList:[]
+				dataList:[],
+				count:0
 			}
 		},
 		onLoad(){
-			this.getData(0)
+			this.currentIndex = 0;
+			this.getData(this.currentIndex)
+		},
+		async onPullDownRefresh() {
+			this.dataList = [];
+			this.currentIndex = 0;
+			await this.getData(this.currentIndex)
+			console.log('refresh');
+			uni.stopPullDownRefresh();
+		},
+		async onReachBottom() {
+			
+			if(this.count <= this.dataList.length){
+				return;
+			}
+			this.currentIndex++;
+			await this.getData(this.currentIndex)
 		},
 		methods: {
 			choseItem(index){
 				console.log(index)
+				
+				uni.navigateTo({
+					url:'/pages/yingyong/detail?myId=' + this.dataList[index].myId,
+					success:()=>{
+						console.log('gotoDetail')
+					},
+					error:()=>{
+						console.log('finish')
+					}
+				})
+				
 			},
 			async getData(index){
 				let item = await http({url:api.getWebList,data:{index:index}})
 				this.count = item.count
 				
+				for(let i = 0; i<item.rows.length; i++){
+					item.rows[i].time = new Date(item.rows[i].time).Format('MM-dd')
+					
+					if(item.rows[i].tags){
+						item.rows[i].tags = JSON.parse(item.rows[i].tags)
+					}
+				}
+				
+				
 				this.dataList = [...this.dataList,...item.rows]
-				console.log(this.dataList)
+				// console.log(this.dataList)
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	.dixian{
+		text-align: center;
+		font-size: $wool-tag-size;
+		padding: 20rpx 0;
+	}
 	.item{
 		padding: 30rpx 20rpx;
 		border-bottom: 1px dashed $wool-bg-color;
@@ -77,14 +124,34 @@
 		}
 		.body{
 			display: flex;
+			margin: 10rpx 0;
 			.left{
 				width:200rpx;
-				height:500rpx;
+				max-height:500rpx;
 				img{
 					width: 200rpx;
 					max-height:500rpx;
 				}
 			}
+			.right{
+				font-size: $wool-text-size;
+				padding: 0 0 0 10rpx;
+				.content{
+					line-height: 22px;
+				  text-align: left;
+				  text-overflow: -o-ellipsis-lastline;
+				  overflow: hidden;
+				  text-overflow: ellipsis;
+				  display: -webkit-box;
+				  -webkit-line-clamp: 3;
+				  -webkit-box-orient: vertical;
+				}
+			}
+		}
+		.foot{
+			display: flex;
+			justify-content: space-between;
+			font-size:$wool-tag-size;
 		}
 	}
 </style>

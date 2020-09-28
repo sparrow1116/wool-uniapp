@@ -1,5 +1,6 @@
  export default {
 	getBankList:'/api/getDataList',
 	getBankDetail:'/api/getDetail',
-	getWebList:'/api/fourweb/getList'
+	getWebList:'/api/fourweb/getList',
+	getWebDetail:'/api/fourweb/getDetail'
 }
