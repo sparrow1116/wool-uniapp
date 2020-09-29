@@ -7,15 +7,15 @@
 			direction='column' title="活动简介" note="列表描述信息">
 			        <template slot="header">
 			            <view class="title">
-			                <h2>{{data.title}}</h2>
-			                <span>置顶</span>
+			                <view>{{data.title}}</view>
+			             
 			            </view>
 			        </template>
 					
 					<template slot="body">
 					    <view class='body'>
 					      <view class='left'>
-					        <img :src=data.headImg />
+					        <image class='img' mode='aspectFit' :src=data.headImg />
 					      </view>
 					      <view class="right">
 					          <view class='content'>
@@ -27,14 +27,14 @@
 					
 					<template slot="footer">
 					    <view class='foot'>
-					       <span class='time'>{{data.time}}</span>
-					    				  <span>
-					    					  <span>浏览：</span>
-					    					  <span>{{data.browseCount}}</span>
-					    				  </span>
-					    				  <span>
-					    					  <span class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</span>
-					    				  </span>
+					       <text class='time'>{{data.time}}</text>
+					    				  <text>
+					    					  <text>浏览：</text>
+					    					  <text>{{data.browseCount}}</text>
+					    				  </text>
+					    				  <text>
+					    					  <text class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</text>
+					    				  </text>
 					     </view> 
 					</template>
 			    </uni-list-item>
@@ -61,8 +61,8 @@
 	
 	export default {
 		components: {
-			uni_list,
 			uniFab,
+			uni_list,
 			uni_list_item
 		},
 		data() {
@@ -71,37 +71,53 @@
 				vertical: 'bottom',
 				direction: 'vertical',
 				pattern: {
-					color: '#7A7E83',
+					color: '#515151',
 					backgroundColor: '#fff',
-					selectedColor: '#007AFF',
-					buttonColor: '#007AFF'
+					selectedColor: '#FF3300',
+					buttonColor: '#FF3300'
 				},
+				currentText:'',
 				content: [{
-						text: '集结组件',
+					
+						text: '币类',
+						iconPath:'/static/bilei.png',
+						selectedIconPath:'/static/bilei-active.png',
 						active: false
 					},
 					{
 						text: '注册账号',
+						iconPath:'/static/zhanghao.png',
+						selectedIconPath:'/static/zhanghao-active.png',
 						active: false
 					},
 					{
-						text: '模版毛线',
+						text: '应用推广',
+						iconPath:'/static/tuiguang.png',
+						selectedIconPath:'/static/tuiguang-active.png',
 						active: false
 					},
 					{
-						text: '模版毛线',
+						text: '巨头应用',
+						iconPath:'/static/pingtai.png',
+						selectedIconPath:'/static/pingtai-active.png',
 						active: false
 					},
 					{
-						text: '模版毛线',
+						text: '羊毛经验',
+						iconPath:'/static/jingyan.png',
+						selectedIconPath:'/static/jingyan-active.png',
 						active: false
 					},
 					{
-						text: '模版毛线',
+						text: '手机任务',
+						iconPath:'/static/renwu.png',
+						selectedIconPath:'/static/renwu-active.png',
 						active: false
 					},
 					{
-						text: '模版毛线',
+						iconPath:'/static/other.png',
+						selectedIconPath:'/static/other-active.png',
+						text: '其他',
 						active: false
 					}
 				],
@@ -135,29 +151,24 @@
 		methods: {
 			trigger(e){
 				console.log('trigger:: e  ' + e)
+				if(this.content[e.index].active){
+					this.currentText = ''
+					this.content[e.index].active = false;
+				}else{
+					this.currentText = this.content[e.index].text;
+					this.content.map((content,index)=>{
+						if(index == e.index){
+							content.active = true;
+						}else{
+							content.active = false
+						}
+					})
+				}
+				this.getData(0)
 			},
 			fabClick(e){
 				console.log('fabClick  ' + e)
 			},
-			// handleScroll(){
-			// 	// let clientHeight = document.documentElement.clientHeight
-			// 	console.log('>>>>>')
-			// 	// console.log(clientHeight)
-			// 	let dd = this.$refs.container.$el.scrollTop
-			// 	let bb = this.$refs.container.$el.scrollHeight
-				
-			// 	console.log(document.getElementById('xx').scrollTop)
-			// 	console.log('dd')
-			// 	console.log(dd)
-			// 	console.log(bb)
-			// },
-			// scrollToTop(e){
-			// 	console.log('>>>>>>>>>>>e')
-			// 	console.log(e)
-			// },
-			// scroll(e){
-			// 	console.log(e)
-			// },
 			choseItem(index){
 				console.log(index)
 				
@@ -172,8 +183,8 @@
 				})
 				
 			},
-			async getData(index){
-				let item = await http({url:api.getWebList,data:{index:index}})
+			async getData(index,level){
+				let item = await http({url:api.getWebList,data:{index:index,tag:this.currentText,level}})
 				this.count = item.count
 				
 				for(let i = 0; i<item.rows.length; i++){
@@ -183,9 +194,13 @@
 						item.rows[i].tags = JSON.parse(item.rows[i].tags)
 					}
 				}
+				if(index == 0){
+					this.dataList = item.rows
+				}else{
+					this.dataList = [...this.dataList,...item.rows]
+				}
 				
 				
-				this.dataList = [...this.dataList,...item.rows]
 				// console.log(this.dataList)
 			}
 		}
@@ -211,26 +226,18 @@
 			justify-content: space-between;
 			h2{
 				font-size:$wool-title-size;
-				width: 600rpx;
 			}
-			span{
-				font-size: $wool-text-size;
-				border-radius: 5px;
-				width:60rpx;
-				height:36rpx;
-				padding:6rpx 15rpx;
-				border: 1px solid $wool-bg-color;
-			}
+			
 		}
 		.body{
 			display: flex;
-			margin: 10rpx 0;
+			margin: 20rpx 0;
 			.left{
 				width:200rpx;
 				max-height:500rpx;
-				img{
+				.img{
 					width: 200rpx;
-					max-height:500rpx;
+					max-height:150rpx;
 				}
 			}
 			.right{

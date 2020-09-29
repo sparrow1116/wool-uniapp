@@ -40,7 +40,7 @@
     ],
 	"tabBar":{
 		"color": "#7A7E83",
-		"selectedColor": "red",
+		"selectedColor": "#ff3300",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		
@@ -68,8 +68,8 @@
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "撸羊毛",
-		"navigationBarBackgroundColor": "red",
+		"navigationBarTitleText": "羊毛吧",
+		"navigationBarBackgroundColor": "#ff3300",
 		"backgroundColor": "#F8F8F8"
 	}
 }

@@ -1,14 +1,15 @@
 <template>
 	<view class='detail'>
 		<view class='title'>
-		  <h2>{{detailData.title}}</h2>
+		  <view>{{detailData.title}}</view>
 		</view>
 		<view class='content'>
 			<view class='block' v-for='(block,index) in detailData.contentArr' :key='index'>
 			  <view class="content">
-				<p style='text-align: left' v-if='block.type == "text"'>{{block.data}}
-				</p>
-				<img v-if='block.type =="img"' :title='detailData.title'
+				<view style='text-align: left' v-if='block.type == "text"'>{{block.data}}
+				</view>
+				<image class='img' v-if='block.type =="img"' :title='detailData.title'
+					mode='aspectFit'
 					@click=previewPic(index)
 					:src='block.data'/>
 			  </view>
@@ -71,7 +72,8 @@
 	.detail{
 		padding:20rpx;
 		.title{
-			font-size: $wool-title-size;
+			font-size: 20px;
+			font-weight: bold;
 		}
 		.content{
 			padding-top: 20rpx;
@@ -82,7 +84,7 @@
 				p{
 					text-align: left;
 				}
-				img{
+				.img{
 					max-width: 680rpx;
 				}
 			}

@@ -12,7 +12,7 @@
 			     @change="change"
 			      />
 		</view>
-		<view class="grop">
+		<!-- <view class="grop">
 			<view>平台</view>
 			<view>撸券</view>
 			<view>周/月</view>
@@ -21,16 +21,50 @@
 			<view>生活</view>
 			<view>视频</view>
 			<view>抽奖</view>
-		</view>
+		</view> -->
 		<view class="list">
-			<view class="item" v-for="item in listDate" @click="choseOne(item)">
-				<view class="left">
+			
+			<uni_list>
+				<uni-list-item 
+				clickable
+				v-for='(data,index) in listDate' :key='data.myId' @click="choseItem(data)" class='item'
+				direction='column' title="活动简介" note="列表描述信息">
+				        <template slot="header">
+							<view></view>
+						</template>
+						<template slot="body">
+							<view >
+								<view class="title">
+									<image src='/static/0d8e5464-223e-4f25-83a8-7b9efd926767.png' mode='aspectFit'></image>
+									<view class="text">{{data.title}}</view>
+									<view class="icon" v-if="data.detailUrl">详情</view>
+								</view>
+								
+								<view class="content">
+									<view class="sDetail">
+										<view v-for="descrip in data.description">
+											{{descrip}}
+										</view>
+									</view>
+									<view class="router" v-if='data.router'>{{data.router}}</view>
+								</view>
+							</view>
+						</template>
+						<template slot="footer">
+							<view></view>
+						</template>
+				    </uni-list-item>
+			</uni_list>
+			
+			
+			<!-- <view class="item" v-for="item in listDate" @click="choseOne(item)"> -->
+				<!-- <view class="left">
 					<view class="commercial">{{item.commercial}}</view>
 					<view>+</view>
 					<view class="bank">{{item.bank}}</view>
-				</view>
+				</view> -->
 				
-				<view class="content">
+				<!-- <view class="content">
 					<view class="title">
 						<view class="text">{{item.title}}</view>
 						<view class="icon" v-if="item.detailUrl">详情</view>
@@ -41,8 +75,8 @@
 						</view>
 					</view>
 					<view class="router" >{{item.router}}</view>
-				</view>
-			</view>
+				</view> -->
+			<!-- </view> -->
 		</view>
 	</view>
 	
@@ -50,12 +84,21 @@
 
 <script>
 	import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
+	import uniFab from '@/components/uni-fab/uni-fab.vue'
+	import uni_list from '@/components/uni-list/uni-list.vue'
+	import uni_list_item from '@/components/uni-list-item/uni-list-item.vue'
+	import uniCard from '@/components/uni-card/uni-card.vue'
+	
 	import{get3MonthBefor} from "@/util/tool.js";
 	import{http} from "@/util/http.js"
 	import api from '@/util/api.js'
 	export default {
 		components: {
-		        uniCalendar
+		        uniCalendar,
+				uni_list,
+				uni_list_item,
+				uniFab,
+				uniCard
 		},
 		onLoad(){
 			let date = new Date();
@@ -91,7 +134,7 @@
 					// this.listDate = dd;
 				 //   console.log("getDate::"+ JSON.stringify(dd))
 			},
-			choseOne(item){
+			choseItem(item){
 				console.log('click  id   ' + item.myId);
 				uni.navigateTo({
 					url:'/pages/bank/detail?myId=' + item.myId,
@@ -146,48 +189,37 @@
 	}
 	.list{
 		.item{
-			display: flex;
-			padding: 2rpx 10rpx;
-			margin-bottom:3px;
-			background:#fff;
-			.left{
+			border-bottom: 1px dashed $wool-bg-color;
+			.title{
 				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				text-align: center;
-				font-weight: bold;
-				background:$wool-bg-color;
-				color:$wool-text-color;
-				width:170rpx;
-			}
-			
-			.content{
-				width:590rpx;
-				padding:10rpx 20rpx;
-				.title{
-					display:flex;
-					justify-content:space-between;
-					.text{
-						text-decoration:underline;
-					}
-					.icon{
-						font-size: 12px;
-						width:50px;
-						height:20px;
-						line-height: 20px;
-						text-align: center;
-						color:$wool-text-color;
-						background: $wool-bg-color;
-					}
+				justify-content: space-between;
+				image{
+					width:50rpx;
+					height:50rpx;
 				}
+				.text{
+					width:540rpx;
+				}
+				.icon{
+					padding:5rpx 10rpx;
+					height:36rpx;
+					border-radius: 10rpx;
+					font-size: $wool-tag-size;
+					color: $wool-bg-color;
+					border: 1px solid $wool-bg-color
+				}
+			}
+		
+			.content{
+				padding:10rpx 20rpx;
 				.sDetail{
-					font-size: 14px;
-					line-height:20px;
-					padding-top: 6px;
+					font-size: $wool-text-size;
+					line-height:50rpx;
+					
 				}
 				.router{
-					font-size: 12px;
-					padding-top: 4px;
+					font-size: $wool-tag-size;
+					padding-top: 20rpx;
 				}
 			}
 		}
