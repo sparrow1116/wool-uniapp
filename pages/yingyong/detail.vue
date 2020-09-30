@@ -15,12 +15,16 @@
 			  </view>
 			</view>
 		</view>
+		<view class='erweima'>
+			<image mode="widthFix" src='/static/erweima_logo.png'></image>
+			<image mode="widthFix" src='http://192.168.137.234:7777/erweima.png'></image>
+		</view>
 	</view>
 </template>
 
 <script>
 	import{http} from "@/util/http.js";
-	import api from '@/util/api.js'
+	import api from '@/util/api.js';
 	export default {
 		onLoad(dd){
 			console.log(dd)
@@ -71,6 +75,13 @@
 <style lang="scss">
 	.detail{
 		padding:20rpx;
+		.erweima{
+			background: #fff;
+			align-items: center;
+			display: flex;
+			padding:20rpx 20rpx;
+			height: 340rpx;
+		}
 		.title{
 			font-size: 20px;
 			font-weight: bold;

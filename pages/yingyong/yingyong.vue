@@ -1,6 +1,10 @@
 <template>
 	<view>
-		<uni_list>
+		<view class='searchBlock'>
+			<image style="height:70rpx; padding:20rpx; width:240rpx;" mode="aspectFill" src='/static/logo-search.png'></image>
+			<uni-search-bar :radius="100" @cancel='cancelSearch' @confirm="search"></uni-search-bar>
+		</view>
+		<uni_list style="margin-top:114rpx">
 			<uni-list-item 
 			clickable
 			v-for='(data,index) in dataList' :key='data.myId' class="item" @click="choseItem(index)"
@@ -42,9 +46,9 @@
 		<view class='dixian' v-if='count === dataList.length'>您已浏览所有羊毛</view>
 		<uni-fab ref="fab" :pattern="pattern" 
 			:content="content" 
-			:horizontal="horizontal" 
-			:vertical="vertical" 
-			:direction="direction" @trigger="trigger" @fabClick="fabClick" />
+			horizontal="right" 
+			vertical="bottom" 
+			direction="vertical" @trigger="trigger" @fabClick="fabClick" />
 	</view>
 	
 </template>
@@ -55,6 +59,7 @@
 	import api from '@/util/api.js'
 	import{deepClone} from "@/util/tool.js";
 	
+	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
 	import uniFab from '@/components/uni-fab/uni-fab.vue'
 	import uni_list from '@/components/uni-list/uni-list.vue'
 	import uni_list_item from '@/components/uni-list-item/uni-list-item.vue'
@@ -67,8 +72,6 @@
 		},
 		data() {
 			return {
-				horizontal: 'right',
-				vertical: 'bottom',
 				direction: 'vertical',
 				pattern: {
 					color: '#515151',
@@ -136,7 +139,7 @@
 		async onPullDownRefresh() {
 			this.dataList = [];
 			this.currentIndex = 0;
-			await this.getData(this.currentIndex)
+			await this.getData()
 			console.log('refresh');
 			uni.stopPullDownRefresh();
 		},
@@ -146,9 +149,20 @@
 				return;
 			}
 			this.currentIndex++;
-			await this.getData(this.currentIndex)
+			await this.getData()
 		},
 		methods: {
+			search(obj){
+				console.log(obj)
+				this.searchValue = obj.value
+				this.currentIndex = 0
+				this.getData();
+			},
+			cancelSearch(){
+				this.searchValue = ''
+				this.currentIndex = 0
+				this.getData();
+			},
 			trigger(e){
 				console.log('trigger:: e  ' + e)
 				if(this.content[e.index].active){
@@ -164,7 +178,8 @@
 						}
 					})
 				}
-				this.getData(0)
+				this.currentIndex = 0;
+				this.getData()
 			},
 			fabClick(e){
 				console.log('fabClick  ' + e)
@@ -183,8 +198,13 @@
 				})
 				
 			},
-			async getData(index,level){
-				let item = await http({url:api.getWebList,data:{index:index,tag:this.currentText,level}})
+			async getData(){
+				console.log('getData')
+				console.log(this.searchValue)
+				let item = await http({url:api.getWebList,data:{
+					index:this.currentIndex,
+					search:this.searchValue,
+					tag:this.currentText}})
 				this.count = item.count
 				
 				for(let i = 0; i<item.rows.length; i++){
@@ -194,7 +214,7 @@
 						item.rows[i].tags = JSON.parse(item.rows[i].tags)
 					}
 				}
-				if(index == 0){
+				if(this.currentIndex == 0){
 					this.dataList = item.rows
 				}else{
 					this.dataList = [...this.dataList,...item.rows]
@@ -208,6 +228,15 @@
 </script>
 
 <style lang="scss">
+	.searchBlock{
+		display: flex;
+		position: fixed;
+		width:100%;
+		z-index:1000;
+		top: 90rpx;
+		background: #fff;
+		justify-content: space-between;
+	}
 	.dixian{
 		text-align: center;
 		font-size: $wool-tag-size;

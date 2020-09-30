@@ -1,5 +1,9 @@
 <template>
-	<view>
+	<view style="background-color: #fff;">
+		<view style='text-align: center; padding-top:20rpx'>
+			<image sytle='height:200rpx' src='../../static/wool-logo.png' mode='widthFix'></image>
+		</view>
+		
 		<view class="head">
 			<view @click="popupDatePan">每日银行精选</view>
 			<view @click="popupDatePan">{{today}}</view>
@@ -12,16 +16,7 @@
 			     @change="change"
 			      />
 		</view>
-		<!-- <view class="grop">
-			<view>平台</view>
-			<view>撸券</view>
-			<view>周/月</view>
-			<view>门店</view>
-			<view>出行</view>
-			<view>生活</view>
-			<view>视频</view>
-			<view>抽奖</view>
-		</view> -->
+		
 		<view class="list">
 			
 			<uni_list>
@@ -38,6 +33,7 @@
 									<image src='/static/0d8e5464-223e-4f25-83a8-7b9efd926767.png' mode='aspectFit'></image>
 									<view class="text">{{data.title}}</view>
 									<view class="icon" v-if="data.detailUrl">详情</view>
+									<view style='width:70rpx' v-if="!data.detailUrl"></view>
 								</view>
 								
 								<view class="content">
@@ -55,29 +51,13 @@
 						</template>
 				    </uni-list-item>
 			</uni_list>
-			
-			
-			<!-- <view class="item" v-for="item in listDate" @click="choseOne(item)"> -->
-				<!-- <view class="left">
-					<view class="commercial">{{item.commercial}}</view>
-					<view>+</view>
-					<view class="bank">{{item.bank}}</view>
-				</view> -->
-				
-				<!-- <view class="content">
-					<view class="title">
-						<view class="text">{{item.title}}</view>
-						<view class="icon" v-if="item.detailUrl">详情</view>
-					</view>
-					<view class="sDetail">
-						<view v-for="descrip in item.description">
-							{{descrip}}
-						</view>
-					</view>
-					<view class="router" >{{item.router}}</view>
-				</view> -->
-			<!-- </view> -->
+			<view class='dixian' v-if='count === listDate.length'>今天就这么多活动了</view>
 		</view>
+		<uni-fab ref="fab" :pattern="pattern"
+			:content="content" 
+			horizontal="right" 
+			vertical="bottom" 
+			direction="vertical" @trigger="trigger" />
 	</view>
 	
 </template>
@@ -103,33 +83,131 @@
 		onLoad(){
 			let date = new Date();
 			this.today = date.Format("yyyy-MM-dd",date);
-			this.endDate = this.today;
+			// this.endDate = this.today;
 			
-			let threeMonthAgo = get3MonthBefor();
-			let threeDate = new Date(threeMonthAgo);
-			
+			// let threeMonthAgo = get3MonthBefor();
+			// let threeDate = new Date(threeMonthAgo);
+			this.currentIndex = 0;
 			this.today = '2020-09-09'
-			this.getDate(this.today);
+			this.getData();
 			
+		},
+		async onPullDownRefresh() {
+			this.listDate = [];
+			this.currentIndex = 0;
+			await this.getData()
+			console.log('refresh');
+			uni.stopPullDownRefresh();
+		},
+		async onReachBottom() {
+			
+			if(this.count <= this.listDate.length){
+				return;
+			}
+			this.currentIndex++;
+			await this.getData()
 		},
 		data() {
 			return {
 				today:"",
 				startDate:"",
 				endDate:"",
-				listDate:[]
+				count:0,
+				listDate:[],
+				pattern: {
+					color: '#515151',
+					backgroundColor: '#fff',
+					selectedColor: '#FF3300',
+					buttonColor: '#FF3300'
+				},
+				filter:'',
+				content: [{
+					
+						text: '平台',
+						iconPath:'/static/bilei.png',
+						selectedIconPath:'/static/bilei-active.png',
+						active: false
+					},
+					{
+						text: '撸券',
+						iconPath:'/static/zhanghao.png',
+						selectedIconPath:'/static/zhanghao-active.png',
+						active: false
+					},
+					{
+						text: '周/月刷',
+						iconPath:'/static/tuiguang.png',
+						selectedIconPath:'/static/tuiguang-active.png',
+						active: false
+					},
+					{
+						text: '门店',
+						iconPath:'/static/pingtai.png',
+						selectedIconPath:'/static/pingtai-active.png',
+						active: false
+					},
+					{
+						text: '出行',
+						iconPath:'/static/jingyan.png',
+						selectedIconPath:'/static/jingyan-active.png',
+						active: false
+					},
+					{
+						text: '生活',
+						iconPath:'/static/renwu.png',
+						selectedIconPath:'/static/renwu-active.png',
+						active: false
+					},
+					{
+						iconPath:'/static/other.png',
+						selectedIconPath:'/static/other-active.png',
+						text: '视频',
+						active: false
+					},
+					{
+						iconPath:'/static/other.png',
+						selectedIconPath:'/static/other-active.png',
+						text: '抽奖',
+						active: false
+					}
+				]
 			}
 		},
 		methods: {
-			async getDate(day){
+			trigger(e){
+				console.log('trigger:: e  ' + e)
+				if(this.content[e.index].active){
+					this.filter = ''
+					this.content[e.index].active = false;
+				}else{
+					this.filter = this.content[e.index].text;
+					this.content.map((content,index)=>{
+						if(index == e.index){
+							content.active = true;
+						}else{
+							content.active = false
+						}
+					})
+				}
+				this.currentIndex = 0
+				this.getData()
+			},
+			async getData(){
 				let dd = await http({url:api.getBankList,
-									data:{date:day}});
-						
-					this.listDate  = dd.map((item)=>{
+									data:{date:this.today,
+											index:this.currentIndex,
+											filter:this.filter}});
+					this.count = dd.count	
+					dd.rows = dd.rows.map((item)=>{
 						item.description = JSON.parse(item.description)
 						item.groupArr = JSON.parse(item.groupArr)
 						return item
 					})
+					if(this.currentIndex == 0){
+						this.listDate = dd.rows
+					}else{
+						this.listDate = [...this.listDate,...dd.rows]
+					}
 					console.log(this.listDate.length)
 					// this.listDate = dd;
 				 //   console.log("getDate::"+ JSON.stringify(dd))
@@ -163,29 +241,17 @@
 		padding-top: 30rpx;
 		width:730rpx;
 		height: 160rpx;
-		background:$wool-bg-color;
+		// background:$wool-bg-color;
 		text-align: center;
 		line-height: 70rpx;
-		color: $wool-text-color;
+		color: $wool-bg-color;
 		margin:5rpx 10rpx;
 		
 	}
-	.grop{
-		display: flex;
-		flex-wrap: wrap;
-		margin: 10rpx 11rpx;
-		view{
-			width:94rpx;
-			height:94rpx;
-			margin: 20rpx 40rpx;
-			border-radius: 50rpx;
-			line-height: 102rpx;
-			color: $wool-bg-color;
-			text-align: center;
-			border: 2px solid $wool-bg-color;
-			font-size: 16px;
-			
-		}
+	.dixian{
+		text-align: center;
+		font-size: $wool-tag-size;
+		padding: 20rpx 0;
 	}
 	.list{
 		.item{

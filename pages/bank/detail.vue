@@ -6,9 +6,19 @@
 		</view>
 		<view class='img_block' v-if='result.picArr && result.picArr.length>0'>
 			<view v-for='pic in result.picArr'>
-				<image mode="widthFix" :src="pic"
+				<image mode="widthFix" src='http://192.168.137.234:7777/aa738423-37b5-4cd6-b891-f8f004ce3bfe.png'
 				                        @error="imageError"></image>
 			</view>
+		</view>
+		<view v-if='result.orignalUrl'>
+			<web-view :src="result.orignalUrl"></web-view>
+			 <!-- <navigator :url="result.orignalUrl">
+			                    阅读原文
+			                </navigator> -->
+		</view>
+		<view class='erweima'>
+			<image mode="widthFix" src='/static/erweima_logo.png'></image>
+			<image mode="widthFix" src='http://192.168.10.7:7777/erweima.png'></image>
 		</view>
 		
 	</view>
@@ -41,14 +51,24 @@
 					for(let i =0; i<item.picArr.length; i++){
 						item.picArr[i] = config.picDomain + '/' + item.picArr[i]
 					}
-					console.log(item.picArr)
+					// console.log(item.picArr)
 					this.result = item;
+					console.log('result')
+					console.log(this.result)
+					
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	.erweima{
+		background: #fff;
+		align-items: center;
+		display: flex;
+		padding:20rpx 20rpx;
+		height: 340rpx;
+	}
 	.title{
 		text-align: center;
 		font-size:50rpx;
