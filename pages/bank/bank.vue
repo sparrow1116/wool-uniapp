@@ -30,7 +30,7 @@
 						<template slot="body">
 							<view >
 								<view class="title">
-									<image src='/static/0d8e5464-223e-4f25-83a8-7b9efd926767.png' mode='aspectFit'></image>
+									<image :src='data.BankIcon' mode='aspectFit'></image>
 									<view class="text">{{data.title}}</view>
 									<view class="icon" v-if="data.detailUrl">详情</view>
 									<view style='width:70rpx' v-if="!data.detailUrl"></view>
@@ -72,6 +72,8 @@
 	import{get3MonthBefor} from "@/util/tool.js";
 	import{http} from "@/util/http.js"
 	import api from '@/util/api.js'
+	import config from '@/util/config.js'
+	
 	export default {
 		components: {
 		        uniCalendar,
@@ -85,10 +87,10 @@
 			this.today = date.Format("yyyy-MM-dd",date);
 			// this.endDate = this.today;
 			
-			// let threeMonthAgo = get3MonthBefor();
-			// let threeDate = new Date(threeMonthAgo);
+			let threeMonthAgo = get3MonthBefor();
+			let threeDate = new Date(threeMonthAgo);
 			this.currentIndex = 0;
-			this.today = '2020-09-09'
+			// this.today = '2020-09-09'
 			this.getData();
 			
 		},
@@ -201,6 +203,9 @@
 					dd.rows = dd.rows.map((item)=>{
 						item.description = JSON.parse(item.description)
 						item.groupArr = JSON.parse(item.groupArr)
+						if(item.bank){
+							item.BankIcon = config.bankIconDomain + encodeURIComponent(item.bank) + '.png'
+						}
 						return item
 					})
 					if(this.currentIndex == 0){
@@ -214,6 +219,13 @@
 			},
 			choseItem(item){
 				console.log('click  id   ' + item.myId);
+				if(!item.detailUrl){
+					uni.showToast({
+					    title: '此条无详情',
+					    duration: 2000
+					});
+					return
+				}
 				uni.navigateTo({
 					url:'/pages/bank/detail?myId=' + item.myId,
 					success:()=>{
@@ -228,9 +240,22 @@
 			popupDatePan(){
 				this.$refs.calendar.open();
 			},
-			confirm(e){
+			async confirm(e){
 				console.log(e);
 				this.today = e.fulldate;
+				
+				this.listDate = [];
+				this.currentIndex = 0;
+				let selectTime = new Date(e.fulldate + ' 00:00:00').valueOf();
+				let startTime = new Date('2020-10-01 00:00:00').valueOf()
+				if(selectTime<startTime){
+					uni.showToast({
+					    title: '本站2020-10-01上线',
+					    duration: 2000
+					});
+				}else{
+					await this.getData()
+				}
 			}
 		}
 	}

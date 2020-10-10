@@ -2,47 +2,56 @@
 	<view>
 		<view class='searchBlock'>
 			<image style="height:70rpx; padding:20rpx; width:240rpx;" mode="aspectFill" src='/static/logo-search.png'></image>
-			<uni-search-bar :radius="100" @cancel='cancelSearch' @confirm="search"></uni-search-bar>
+			<view style="width: 380rpx;">
+				<input class="uni-input self-search"
+					v-model="searchValue"
+					@confirm='search'
+				 @focus='inputFocus' 
+				 confirm-type="search" placeholder="请输入搜索内容" />
+			</view>
+			<text v-if='isFocus'  @click="cancelS">取消</text>
 		</view>
-		<uni_list style="margin-top:114rpx">
-			<uni-list-item 
-			clickable
-			v-for='(data,index) in dataList' :key='data.myId' class="item" @click="choseItem(index)"
-			direction='column' title="活动简介" note="列表描述信息">
-			        <template slot="header">
-			            <view class="title">
-			                <view>{{data.title}}</view>
-			             
-			            </view>
-			        </template>
-					
-					<template slot="body">
-					    <view class='body'>
-					      <view class='left'>
-					        <image class='img' mode='aspectFit' :src=data.headImg />
-					      </view>
-					      <view class="right">
-					          <view class='content'>
-					              {{data.desciption}}
-					          </view>
-					      </view>
-					    </view> 
-					</template>
-					
-					<template slot="footer">
-					    <view class='foot'>
-					       <text class='time'>{{data.time}}</text>
-					    				  <text>
-					    					  <text>浏览：</text>
-					    					  <text>{{data.browseCount}}</text>
-					    				  </text>
-					    				  <text>
-					    					  <text class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</text>
-					    				  </text>
-					     </view> 
-					</template>
-			    </uni-list-item>
-		</uni_list>
+		<view class='classContainer'>
+			<uni_list>
+				<uni-list-item 
+				clickable
+				v-for='(data,index) in dataList' :key='data.myId' class="item" @click="choseItem(index)"
+				direction='column' title="活动简介" note="列表描述信息">
+				        <template slot="header">
+				            <view class="title">
+				                <view>{{data.title}}</view>
+				            </view>
+				        </template>
+						
+						<template slot="body">
+						    <view class='body'>
+						      <view class='left'>
+						        <image class='img' mode='aspectFit' :src=data.headImg />
+						      </view>
+						      <view class="right">
+						          <view class='content'>
+						              {{data.desciption}}
+						          </view>
+						      </view>
+						    </view> 
+						</template>
+						
+						<template slot="footer">
+						    <view class='foot'>
+						       <text class='time'>{{data.time}}</text>
+						    				  <text>
+						    					  <text>浏览：</text>
+						    					  <text>{{data.browseCount}}</text>
+						    				  </text>
+						    				  <text>
+						    					  <text class='tag' v-for="(tag,index) in data.tags" :key='index'>{{tag}}</text>
+						    				  </text>
+						     </view> 
+						</template>
+				    </uni-list-item>
+			</uni_list>
+		</view>
+		
 		<view class='dixian' v-if='count === dataList.length'>您已浏览所有羊毛</view>
 		<uni-fab ref="fab" :pattern="pattern" 
 			:content="content" 
@@ -72,7 +81,8 @@
 		},
 		data() {
 			return {
-				direction: 'vertical',
+				searchValue:'',
+				isFocus:false,
 				pattern: {
 					color: '#515151',
 					backgroundColor: '#fff',
@@ -152,17 +162,28 @@
 			await this.getData()
 		},
 		methods: {
-			search(obj){
-				console.log(obj)
-				this.searchValue = obj.value
-				this.currentIndex = 0
-				this.getData();
+			inputFocus(){
+				this.isFocus = true
+				console.log('onfocus')
 			},
-			cancelSearch(){
+			// inputBlur(){
+			// 	this.isFocus = false;
+			// },
+			cancelS(){
+				console.log('click cancel')
+				this.isFocus = false;
 				this.searchValue = ''
+				this.currentText = ''
+				this.currentIndex = 0
+				this.getData()
+			},
+			search(){
+				// this.searchValue = this.inputText
+				this.currentText = ''
 				this.currentIndex = 0
 				this.getData();
 			},
+			
 			trigger(e){
 				console.log('trigger:: e  ' + e)
 				if(this.content[e.index].active){
@@ -228,15 +249,59 @@
 </script>
 
 <style lang="scss">
+	/* #ifdef H5 */
 	.searchBlock{
 		display: flex;
 		position: fixed;
 		width:100%;
 		z-index:1000;
 		top: 90rpx;
+		height:110rpx;
+		background: #fff;
+		align-items:center;
+		justify-content: space-between;
+		
+		text{
+			font-size: 14px;
+			padding-right: 20rpx;
+		}
+	}
+	.classContainer{
+		margin-top:110rpx;
+	}
+	/* #endif */
+	
+	/* #ifdef MP-WEIXIN */
+	.searchBlock{
+		display: flex;
+		position: fixed;
+		width:100%;
+		z-index:1000;
+		top: 0;
+		height:110rpx;
 		background: #fff;
 		justify-content: space-between;
+		align-items:center;
+		text{
+			font-size: 14px;
+			// padding-top: 18px;
+			padding-right: 5px;
+		}
 	}
+	.classContainer{
+		margin-top:90rpx;
+	}
+	/* #endif */
+	
+	.self-search{
+		height:70rpx;
+		border: 1px solid #ccc;
+		border-radius: 35rpx;
+		// margin-top:20rpx;
+		padding-left:40rpx;
+		margin-right:20rpx;
+	}
+	
 	.dixian{
 		text-align: center;
 		font-size: $wool-tag-size;
@@ -253,9 +318,9 @@
 		.title{
 			display: flex;
 			justify-content: space-between;
-			h2{
-				font-size:$wool-title-size;
-			}
+			
+			font-size:$wool-title-size;
+			
 			
 		}
 		.body{
@@ -288,6 +353,9 @@
 			display: flex;
 			justify-content: space-between;
 			font-size:$wool-tag-size;
+			.tag{
+				margin-right:10rpx;
+			}
 		}
 	}
 </style>

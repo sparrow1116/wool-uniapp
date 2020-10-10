@@ -9,7 +9,7 @@
 				<view style='text-align: left' v-if='block.type == "text"'>{{block.data}}
 				</view>
 				<image class='img' v-if='block.type =="img"' :title='detailData.title'
-					mode='aspectFit'
+					mode='widthFix'
 					@click=previewPic(index)
 					:src='block.data'/>
 			  </view>
@@ -17,7 +17,7 @@
 		</view>
 		<view class='erweima'>
 			<image mode="widthFix" src='/static/erweima_logo.png'></image>
-			<image mode="widthFix" src='http://192.168.137.234:7777/erweima.png'></image>
+			<image mode="widthFix" src='https://wollpic.oss-cn-shanghai.aliyuncs.com/zhuanyoutupian/erweima.png'></image>
 		</view>
 	</view>
 </template>

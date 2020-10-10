@@ -40,6 +40,10 @@
 				"navigationBarTitleText": "活动介绍"
 			}
         }
+        ,{
+            "path" : "pages/bank/webview",
+            "style" : {}
+        }
     ],
 	"tabBar":{
 		"color": "#7A7E83",

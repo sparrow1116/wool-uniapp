@@ -5,20 +5,23 @@
 			<view class='descipt_item' v-for="desp in result.despArr">{{desp}}</view>
 		</view>
 		<view class='img_block' v-if='result.picArr && result.picArr.length>0'>
-			<view v-for='pic in result.picArr'>
-				<image mode="widthFix" src='http://192.168.137.234:7777/aa738423-37b5-4cd6-b891-f8f004ce3bfe.png'
+			<view v-for='(pic,index) in result.picArr' :key='index'>
+				<image class='img' mode="widthFix" :src='pic'
+				@click='previewPic(index)'
 				                        @error="imageError"></image>
 			</view>
 		</view>
 		<view v-if='result.orignalUrl'>
-			<web-view :src="result.orignalUrl"></web-view>
-			 <!-- <navigator :url="result.orignalUrl">
-			                    阅读原文
-			                </navigator> -->
+			<!-- #ifdef H5 -->
+			<a :href='result.orignalUrl' >阅读原文</a>
+			<!-- #endif -->
+			<!-- #ifndef H5 -->
+			<u-parse :content="content" @navigate="navigate"></u-parse>
+			<!-- #endif -->
 		</view>
 		<view class='erweima'>
 			<image mode="widthFix" src='/static/erweima_logo.png'></image>
-			<image mode="widthFix" src='http://192.168.10.7:7777/erweima.png'></image>
+			<image mode="widthFix" @click='previewPic("last")' :src='erweima' ></image>
 		</view>
 		
 	</view>
@@ -28,11 +31,17 @@
 	import{http} from "@/util/http.js";
 	import config from '@/util/config.js'
 	import api from '@/util/api.js'
+	import uParse from "@/components/feng-parse/parse.vue"
+	
 	export default {
+		components:{
+			uParse
+		},
 		data() {
 			return {
+				content:'',
 				result:{},
-				src:'http://172.171.2.211:7777/1f9a3531-a591-41e5-8f7b-c9e3e37605bf.png'
+				erweima:'https://wollpic.oss-cn-shanghai.aliyuncs.com/zhuanyoutupian/erweima.png?v=1'
 			}
 			
 		},
@@ -41,6 +50,40 @@
 			this.getData(dd);
 		},
 		methods: {
+			previewPic(index){
+				let allArr = [...this.result.picArr,this.erweima]
+				let currentIndex = index
+				if(index === 'last'){
+					currentIndex = allArr.length -1
+				}
+				
+				uni.previewImage({
+					urls:allArr,
+					indicator:'default',
+					loop: true,
+					current:currentIndex,
+					success:(a)=>{
+						console.log('success')
+						console.log(a)
+					},
+					fail: (a)=> {
+						console.log('fail')
+						console.log(a)
+					}
+				})
+			},
+			navigate(){
+				console.log('aaa')
+				uni.navigateTo({
+					url:'/pages/bank/webview?url=' + this.result.orignalUrl,
+					success:()=>{
+						console.log('gotoDetail')
+					},
+					error:()=>{
+						console.log('finish')
+					}
+				})
+			},
 			imageError(){
 				console.log('fuck')
 			},
@@ -55,7 +98,7 @@
 					this.result = item;
 					console.log('result')
 					console.log(this.result)
-					
+					this.content= '<a href='+this.result.orignalUrl +'>阅读原文</a>'
 			}
 		}
 	}
@@ -99,6 +142,9 @@
 		
 	}
 	.img_block{
-		margin:10rpx 50rpx
+		margin:10rpx 50rpx;
+		.img{
+			max-width: 680rpx;
+		}
 	}
 </style>
