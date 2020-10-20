@@ -63,9 +63,9 @@
 		        "text": "应用推广"
 		    },{
 		        "pagePath": "pages/shishi/shishi",
-		        "iconPath": "static/shishi.png",
-		        "selectedIconPath": "static/shishi-active.png",
-		        "text": "实时小毛"
+		        "iconPath": "static/xindetihui.png",
+		        "selectedIconPath": "static/xindetihui-active.png",
+		        "text": "心得体会"
 		    },{
 		        "pagePath": "pages/we/we",
 		        "iconPath": "static/we.png",

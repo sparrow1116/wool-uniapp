@@ -271,7 +271,7 @@
 	}
 	/* #endif */
 	
-	/* #ifdef MP-WEIXIN */
+	/* #ifndef H5 */
 	.searchBlock{
 		display: flex;
 		position: fixed;

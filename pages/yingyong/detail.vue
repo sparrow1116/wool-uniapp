@@ -96,7 +96,7 @@
 					text-align: left;
 				}
 				.img{
-					max-width: 680rpx;
+					width: 700rpx;
 				}
 			}
 		}

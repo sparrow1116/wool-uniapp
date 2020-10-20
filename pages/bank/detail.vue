@@ -142,9 +142,10 @@
 		
 	}
 	.img_block{
-		margin:10rpx 50rpx;
+		margin:10rpx 30rpx;
 		.img{
-			max-width: 680rpx;
+			margin: 0 auto;
+			width: 690rpx;
 		}
 	}
 </style>
