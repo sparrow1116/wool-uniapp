@@ -98,39 +98,39 @@
 						active: false
 					},
 					{
-						text: '注册账号',
-						iconPath:'/static/zhanghao.png',
-						selectedIconPath:'/static/zhanghao-active.png',
+						text: '购物平台',
+						iconPath:'/static/gouwupingtai.png',
+						selectedIconPath:'/static/gouwupingtai-active.png',
+						active: false
+					},
+					{
+						text: '银行证券',
+						iconPath:'/static/yinhangzhengquan.png',
+						selectedIconPath:'/static/yinhangzhengquan-active.png',
 						active: false
 					},
 					{
 						text: '应用推广',
-						iconPath:'/static/tuiguang.png',
-						selectedIconPath:'/static/tuiguang-active.png',
+						iconPath:'/static/yingyongtuiguang.png',
+						selectedIconPath:'/static/yingyongtuiguang-active.png',
 						active: false
 					},
 					{
-						text: '巨头应用',
-						iconPath:'/static/pingtai.png',
-						selectedIconPath:'/static/pingtai-active.png',
+						text: '挂机软件',
+						iconPath:'/static/guajiruanjian.png',
+						selectedIconPath:'/static/guajiruanjian-active.png',
 						active: false
 					},
 					{
-						text: '羊毛经验',
-						iconPath:'/static/jingyan.png',
-						selectedIconPath:'/static/jingyan-active.png',
+						text: '扫码打码',
+						iconPath:'/static/saomadama.png',
+						selectedIconPath:'/static/saomadama-active.png',
 						active: false
 					},
 					{
-						text: '手机任务',
-						iconPath:'/static/renwu.png',
-						selectedIconPath:'/static/renwu-active.png',
-						active: false
-					},
-					{
-						iconPath:'/static/other.png',
-						selectedIconPath:'/static/other-active.png',
-						text: '其他',
+						iconPath:'/static/zhuanfaqiandao.png',
+						selectedIconPath:'/static/zhuanfaqiandao-active.png',
+						text: '转发签到',
 						active: false
 					}
 				],
