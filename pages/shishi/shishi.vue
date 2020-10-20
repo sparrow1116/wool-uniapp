@@ -89,6 +89,14 @@
 						这些公司后浪退前浪，不知道能活多久。我们只管0撸，不薅白不薅。
 				    </view>
 			</uni-collapse-item>
+			
+			<uni-collapse-item title="银行汇总">
+				    <view style="padding: 10rpx;">
+				        各大银行为了促进消费，以及推广自己信用卡的使用，推出各种优惠活动。
+						此类活动大家可以放心大胆的撸。平时都是有些小毛，年底等时刻会有比较大的毛。
+						本站每天更新各大银行的活动，并保存过去3个月的活动供撸友们查阅
+				    </view>
+			</uni-collapse-item>
 		</uni-collapse>
 	</view>
 </template>
