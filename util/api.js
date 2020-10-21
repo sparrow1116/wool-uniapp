@@ -2,5 +2,6 @@
 	getBankList:'/api/getDataList',
 	getBankDetail:'/api/getDetail',
 	getWebList:'/api/fourweb/getList',
-	getWebDetail:'/api/fourweb/getDetail'
+	getWebDetail:'/api/fourweb/getDetail',
+	login:'/api/user/login'
 }

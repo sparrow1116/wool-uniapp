@@ -20,19 +20,35 @@
 </template>
 
 <script>
+	import{http} from "@/util/http.js";
 	export default {
 		data() {
 			return {
-				isLogin:false,
-				userInfo:{}
+				isLogin:true,
+				userInfo:{
+					nickName: "Terry",
+				    gender: 1,
+				    language: "zh_CN",
+				    city: "Nanjing",
+				    province: "Jiangsu",
+				    country: "China",
+				    avatarUrl:"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKib2kxAvJhuRuibeS9J1Iwj7dPQ60JMNMWKZ3Ilia1e8MTbeXK2JoGM3ibvktkOuG76VN8Wc3JhkbzibA/132"
+				}
 			}
 		},
 		onLoad(){
-			
+			let userInfoStr = uni.getStorageSync('userInfo')
+			if(userInfoStr){
+				this.isLogin = true
+				this.userInfo = JSON.parse(userInfoStr)
+			}
 		},
 		methods: {
 			logout(){
 				console.log("logout")
+				uni.removeStorageSync('userInfo')
+				this.isLogin = false;
+				this.userInfo = {}
 			},
 			appLoginWx(){
 				console.log('>>>> come in')
@@ -55,8 +71,9 @@
 										console.log(info);
 										this.userInfo = info.userInfo;
 										this.isLogin = true;
-										// this.nickName = info.userInfo.nickName
-										// alert("成功");
+										if(info.userInfo){
+											uni.setStorageSync('userInfo',JSON.stringify(this.userInfo))
+										}
 									},
 									fail: () => {
 										uni.showToast({title:"微信登录授权失败",icon:"none"});

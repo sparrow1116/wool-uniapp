@@ -52,15 +52,15 @@
 		"backgroundColor": "#ffffff",
 		
 		"list": [{
-		        "pagePath": "pages/bank/bank",
-		        "iconPath": "static/bank.png",
-		        "selectedIconPath": "static/bank-active.png",
-		        "text": "银行汇总"
-		    }, {
 		        "pagePath": "pages/yingyong/yingyong",
 		        "iconPath": "static/yingyong.png",
 		        "selectedIconPath": "static/yingyong-active.png",
 		        "text": "应用推广"
+		    },{
+		        "pagePath": "pages/bank/bank",
+		        "iconPath": "static/bank.png",
+		        "selectedIconPath": "static/bank-active.png",
+		        "text": "银行汇总"
 		    },{
 		        "pagePath": "pages/shishi/shishi",
 		        "iconPath": "static/xindetihui.png",

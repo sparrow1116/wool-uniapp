@@ -19,13 +19,20 @@
 			<image mode="widthFix" src='/static/erweima_logo.png'></image>
 			<image mode="widthFix" src='https://wollpic.oss-cn-shanghai.aliyuncs.com/zhuanyoutupian/erweima.png'></image>
 		</view>
+		
+		<commentInput @publish='publish'></commentInput>
+		
 	</view>
 </template>
 
 <script>
+	import commentInput from '@/components/comment-input/comment-input.vue'
 	import{http} from "@/util/http.js";
 	import api from '@/util/api.js';
 	export default {
+		components: {
+			commentInput
+		},
 		onLoad(dd){
 			console.log(dd)
 			this.getData(dd);
@@ -36,6 +43,9 @@
 			}
 		},
 		methods: {
+			publish(data){
+				console.log(data)
+			},
 			async getData(dd){
 				let item = await http({url:api.getWebDetail,data:dd})
 				item.contentArr = JSON.parse(item.contentArr)
@@ -74,20 +84,23 @@
 
 <style lang="scss">
 	.detail{
-		padding:20rpx;
+		padding:20rpx 0;
 		.erweima{
 			background: #fff;
 			align-items: center;
 			display: flex;
 			padding:20rpx 20rpx;
+			margin-bottom: 40rpx;
 			height: 340rpx;
 		}
 		.title{
+			padding: 0 20rpx;
 			font-size: 20px;
 			font-weight: bold;
 		}
 		.content{
-			padding-top: 20rpx;
+			padding: 20rpx 20rpx 0 20rpx;
+			
 			text-align: center;
 			.block{
 				font-size: $wool-text-size;
@@ -100,6 +113,7 @@
 				}
 			}
 		}
+		
 	}
 	
 </style>
